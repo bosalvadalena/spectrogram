@@ -26,7 +26,7 @@ def main():
 
     # Check if file exists; exit if not found or not file
     if not os.path.isfile(args.filename):
-        raise FileNotFoundError(f"{sys.argv[1]} does not exist")
+        raise FileNotFoundError(f"{args.filename} does not exist")
 
     # Split the header and the data
     header, data = read_wave(args.filename)
@@ -39,7 +39,7 @@ def main():
 
     # Print if verbose
     if args.verbose:
-        print(f"Filename: {sys.argv[1]}")
+        print(f"Filename: {args.filename}")
         print(f"Header size: {len(header)} bytes")
         print(f"Data size: {len(data)} bytes")
         print(f"Sample rate: {sample_rate} Hz")
