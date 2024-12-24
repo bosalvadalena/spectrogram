@@ -1,10 +1,9 @@
 import cmath
 import numpy as np
 
+# Discrete Fourier Transform (DFT)
 def dft(signal):
-    """
-    Discrete Fourier Transform (DFT)
-    """
+
     N = len(signal)
     transform = np.zeros(N, dtype=complex)
 
