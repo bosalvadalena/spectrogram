@@ -1,4 +1,6 @@
 import time
+import numpy as np
+from dft import dft
 
 def test_processing_time(signal):
 
@@ -9,14 +11,14 @@ def test_processing_time(signal):
 
             # DFT processing time
             start = time.time()
-            dft(audio[:samples])
+            dft(signal[:samples])
             end = time.time()
 
             dft_time = end - start
 
             # FFT processing time
             start = time.time()
-            np.fft.fft(audio[:samples])
+            np.fft.fft(signal[:samples])
             end = time.time()
 
             fft_time = end - start
