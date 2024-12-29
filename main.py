@@ -16,15 +16,18 @@ def main():
             description = """a simple program that implements
             the spectrogram of a given single channel WAVE file""",
             )
-
     parser.add_argument("filename")
-    parser.add_argument("--window",
+    parser.add_argument("-w", "--window-length",
                         type = int,
                         choices = range(2, 1000),
                         default = 20,
                         metavar = "INTEGER",
-                        help = "window size in milliseconds")
-    parser.add_argument("--overlap",
+                        help = "window length in milliseconds")
+    parser.add_argument("-f", "--window-function",
+                        choices = ["hanning", "hamming", "blackman"],
+                        default = "hanning",
+                        help = "window function")
+    parser.add_argument("-o", "--overlap",
                         type = float,
                         choices = [i / 100 for i in range(100)],
                         default = 0.5,
@@ -36,8 +39,13 @@ def main():
     parser.add_argument("-v", "--verbose",
                         action = "store_true",
                         help = "show more output")
-
     args = parser.parse_args()
+
+    window_functions = {
+        "hanning": np.hanning,
+        "hamming": np.hamming,
+        "blackman": np.blackman,
+    }
 
     # Check if file exists; exit if not found or not file
     if not os.path.isfile(args.filename):
@@ -67,14 +75,14 @@ def main():
         exit(0)
 
     # These parameters control the way the spectrogram is generated
-    window_size = int(args.window * sample_rate / 1000)
+    window_length = int(args.window_length * sample_rate / 1000)
     overlap = args.overlap
 
     # Create the spectrogram
-    spectrogram = spec(signal, sample_rate, window_size, overlap)
+    spectrogram = spec(signal, window_length, overlap, window_functions[args.window_function])
 
     # These axes are necessary to plot the data correctly
-    time_axis, freq_axis = axes(len(signal), sample_rate, window_size, overlap)
+    time_axis, freq_axis = axes(len(signal), sample_rate, window_length, overlap)
 
     # Plot the spectrogram
     plot(spectrogram, time_axis, freq_axis)
