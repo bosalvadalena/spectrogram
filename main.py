@@ -21,17 +21,18 @@ def main():
                         type = int,
                         choices = range(2, 1000),
                         default = 20,
-                        metavar = "INTEGER",
+                        metavar = "",
                         help = "window length in milliseconds")
     parser.add_argument("-f", "--window-function",
                         choices = ["hanning", "hamming", "blackman"],
                         default = "hanning",
+                        metavar = "",
                         help = "window function")
     parser.add_argument("-o", "--overlap",
                         type = float,
                         choices = [i / 100 for i in range(100)],
                         default = 0.5,
-                        metavar = "FLOAT",
+                        metavar = "",
                         help = "window overlap percent as a decimal")
     parser.add_argument("-t", "--tests", 
                         action = "store_true",
@@ -74,15 +75,15 @@ def main():
         test_processing_time(signal)
         exit(0)
 
-    # These parameters control the way the spectrogram is generated
-    window_length = int(args.window_length * sample_rate / 1000)
-    overlap = args.overlap
+    # Convert window_length from milliseconds to samples
+    window_length = int(sample_rate * args.window_length / 1000)
 
     # Create the spectrogram
-    spectrogram = spec(signal, window_length, overlap, window_functions[args.window_function])
+    spectrogram = spec(signal, window_length, args.overlap, window_functions[args.window_function])
 
     # These axes are necessary to plot the data correctly
-    time_axis, freq_axis = axes(len(signal), sample_rate, window_length, overlap)
+    time_axis = time_segs(len(signal), sample_rate, window_length, args.overlap)
+    freq_axis = freq_bins(window_length, sample_rate)
 
     # Plot the spectrogram
     plot(spectrogram, time_axis, freq_axis)
