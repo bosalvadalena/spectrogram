@@ -1,7 +1,6 @@
 import numpy as np
 
-# This is our windowing spectrogram function
-def spec(signal, window_size, overlap, window_function):
+def stft(signal, window_size, overlap, window_function):
 
     step = int(window_size * (1 - overlap))
 

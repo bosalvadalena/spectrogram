@@ -5,7 +5,7 @@ import argparse
 import numpy as np
 from wave import *
 from dft import *
-from spec import *
+from stft import *
 from plot import *
 from tests import *
 
@@ -79,7 +79,7 @@ def main():
     window_length = int(sample_rate * args.window_length / 1000)
 
     # Create the spectrogram
-    spectrogram = spec(signal, window_length, args.overlap, window_functions[args.window_function])
+    spectrogram = stft(signal, window_length, args.overlap, window_functions[args.window_function])
 
     # These axes are necessary to plot the data correctly
     time_axis = time_segs(len(signal), sample_rate, window_length, args.overlap)
